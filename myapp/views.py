@@ -10,7 +10,7 @@ render是用来返回html页面和页面初始数据的。
 
 def welcome(request):
     print('welcome')
-    return render(request, 'welcome.html')
+    return render(request, 'welcome.html', {"whichHTML": "Home.html", "oid": ""})
 
 
 def case_list(request):
@@ -20,4 +20,12 @@ def case_list(request):
 
 def home(request):
     print('home')
-    return render(request, 'home.html')
+    return render(request, 'home.html', {'username': 'wangshihua'})
+
+
+def child(request, eid, oid):
+    return render(request, eid)
+
+
+def login(request):
+    return render(request, 'login.html')

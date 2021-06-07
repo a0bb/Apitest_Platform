@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^welcome/$', welcome),  # 进入主页
     url(r'^case_list/$', case_list),  # 进入用例列表页
     url(r'^home/$', home),  # 进入首页
+    url(r"^child/(?P<eid>.+)/(?P<oid>.*)/$", child),  # 返回子页面
+    url(r'^login/$', login),  # 学生登录页面
 ]
