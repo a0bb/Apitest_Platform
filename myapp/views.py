@@ -47,6 +47,7 @@ def login_action(request):
         # 进行正确的动作
         # return HttpResponseRedirect('/home/')
         auth.login(request, user)
+        # 给浏览器写入session信息，没有session则进入不了登陆后的页面
         request.session['user'] = username
         return HttpResponse('success')
     else:
@@ -66,6 +67,17 @@ def register_action(request):
         return HttpResponse('注册失败，用户名已经存在，请重新注册！')
 
 
+# 退出登陆
+def logout(request):
+    auth.logout(request)
+    """
+    这里我们是可以直接用HttpResponseRedirect重定向函数 给直接重定到登陆页面/login/的。
+    因我前面讲了，如果是a标签的href 或者form表单提交 这种会触发页面刷新的情况，后端函数都可以直接让用户重定向。
+    但是如果是异步请求$.get() 则不可以。
+    """
+    return HttpResponseRedirect('/login/')
 
 
-
+# 吐槽函数
+def pei(reqquest):
+    ...
