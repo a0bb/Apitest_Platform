@@ -20,7 +20,7 @@
             </a>
         </li>
         <li>
-            <a href="#">
+            <a href="/help/">
                 帮助
             </a>
         </li>
@@ -88,9 +88,21 @@
 
 <div id="page1"></div>
 <script>
+    // 这句话的意思是，一旦打开welcome.html， 那么就运行这句代码，这句代码会把id为page1的那个空div，给它的内容加载另一个url返回的页面。
+    // 这个url 我定位：'/child/'+'{{ whichHTML }}/{{ oid }}/' 它会返回我们真正的要访问的页面 home.html
+    // 其中的/child/一级路由只是我的个人习惯，以便自己知道这个路由是来找孩子（子页面）的。
+    // 后面俩个 大括号，我们前面说了，浏览器会识别成变量，把我们的俩个参数的值都替换进来。这个whichHTML 就是我们真实要拿到的html的名字。
+    // 后面的oid，也就是我预留出来的一个参数。以后可能用的上。万一welcome去接儿子home,结果home说你怎么证明你是我爸爸？拿出来证明。
+    // 证明对了，儿子就跟着回家，证明不对，那么就👮‍♀️同志跟你回家了，虽然我们今天的教程用不上这个证明参数，但是后续是一定用上的相信我。
     $('#page1').load('/child/'+'{{ whichHTML }}/{{ oid }}/')
 </script>
 
+<script>
+    // 注意{{ 变量名 }} 只会忠诚的替换，你要是直接写，它会报错，你要想把它当作一个字符串，外面就要写双引号或单引号
+    if ("{{ whichHTML }}" != 'home.html'){
+        document.getElementById('menu_btn').click();
+    }
+</script>
 
 </body>
 </html>

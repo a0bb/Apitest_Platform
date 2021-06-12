@@ -31,4 +31,5 @@ urlpatterns = [
     url(r'^accounts/login/$', login),  # 非登录状态自动跳回登录页面
     url(r'^logout/$', logout),  # 退出
     url(r'^pei/$', pei),  # 匿名吐槽
+    url(r'^help/$', api_help),  # 帮助文档
 ]
