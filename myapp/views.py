@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from myapp.models import DBTucao
+from myapp.models import DBTucao, DBHomeHref
 """
 HttpResponse函数是用来返回一个字符串的，后续返回的json格式字符串也是用它;
 HttpResponseRedirect 是用来重定向到其他url上的;
@@ -29,10 +29,22 @@ def home(request):
 
 
 def child(request, eid, oid):
-    # 它只做一件事，就是真实的返回
-    # 我们目标html, 在这里就是home.html，其中的eid，就是获取url中的(?P < eid >.+) 的值，也就是我们welcome.html中的
+    # 它只做一件事，就是真实的返回我们目标html, 在这里就是home.html
+    # 其中的eid，就是获取url中的(?P < eid >.+) 的值，也就是我们welcome.html中的
     # {{whichHTML}} ，也就是我们后台函数返回的子页面html的真实名字。
-    return render(request, eid)
+    print(eid)
+    res = child_json(eid)
+    return render(request, eid, res)
+
+
+# 控制不同的页面返回不同的数据：数据分发器
+def child_json(eid):
+    res = {}
+    if eid == 'home.html':
+        data = DBHomeHref.objects.all()
+        res = {'hrefs': data}
+
+    return res
 
 
 def login(request):

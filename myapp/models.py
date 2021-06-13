@@ -8,3 +8,11 @@ class DBTucao(models.Model):
 
     def __str__(self):
         return self.text + str(self.ctime)
+
+
+class DBHomeHref(models.Model):
+    name = models.CharField(max_length=30, null=True)  # 超链接名称
+    href = models.CharField(max_length=1000, null=True)  # 超链接内容
+
+    def __str__(self):
+        return self.name

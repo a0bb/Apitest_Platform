@@ -99,7 +99,7 @@
 
 <script>
     // 注意{{ 变量名 }} 只会忠诚的替换，你要是直接写，它会报错，你要想把它当作一个字符串，外面就要写双引号或单引号
-    if ("{{ whichHTML }}" != 'home.html'){
+    if ("{{ whichHTML }}" !== 'home.html'){
         document.getElementById('menu_btn').click();
     }
 </script>
