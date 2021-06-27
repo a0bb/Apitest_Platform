@@ -48,8 +48,14 @@ def child_json(eid, oid=''):
         print(data)
         res = {'projects': data}
     if eid == 'P_apis.html':
-        project_name = DBProject.objects.filter(id=oid)[0].name
-        res = {'project_name': project_name}
+        project = DBProject.objects.filter(id=oid)[0]
+        res = {'project': project}
+    if eid == 'P_cases.html':
+        project = DBProject.objects.filter(id=oid)[0]
+        res = {'project': project}
+    if eid == 'P_project_set.html':
+        project = DBProject.objects.filter(id=oid)[0]
+        res = {'project': project}
 
     return res
 
@@ -154,7 +160,7 @@ def open_cases(request, id):
     return render(
         request,
         'welcome.html',
-        {'whichHTML': 'P_cases.html', 'oid': ''}
+        {'whichHTML': 'P_cases.html', 'oid': project_id}
     )
 
 
@@ -164,5 +170,17 @@ def open_project_set(request, id):
     return render(
         request,
         'welcome.html',
-        {'whichHTML': 'P_project_set.html', 'oid': ''}
+        {'whichHTML': 'P_project_set.html', 'oid': project_id}
     )
+
+
+# 保存项目设置
+def save_project_set(request, id):
+    project_id = id
+    name = request.GET['name']
+    remark = request.GET['remark']
+    other_user = request.GET['other_user']
+    DBProject.objects.filter(id=project_id).update(name=name, remark=remark, other_user=other_user)
+
+    return HttpResponse('')
+
