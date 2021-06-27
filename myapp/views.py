@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from myapp.models import DBTucao, DBHomeHref
+from myapp.models import DBTucao, DBHomeHref, DBProject
 """
 HttpResponse函数是用来返回一个字符串的，后续返回的json格式字符串也是用它;
 HttpResponseRedirect 是用来重定向到其他url上的;
@@ -30,19 +30,26 @@ def home(request):
 
 def child(request, eid, oid):
     # 它只做一件事，就是真实的返回我们目标html, 在这里就是home.html
-    # 其中的eid，就是获取url中的(?P < eid >.+) 的值，也就是我们welcome.html中的
-    # {{whichHTML}} ，也就是我们后台函数返回的子页面html的真实名字。
+    # 其中的eid，就是获取url中的(?P < eid >.+) 的值，也就是我们welcome.html中的{{whichHTML}}
+    # 也就是我们后台函数返回的子页面html的真实名字。
     print(eid)
-    res = child_json(eid)
+    res = child_json(eid, oid)
     return render(request, eid, res)
 
 
 # 控制不同的页面返回不同的数据：数据分发器
-def child_json(eid):
+def child_json(eid, oid=''):
     res = {}
     if eid == 'home.html':
         data = DBHomeHref.objects.all()
         res = {'hrefs': data}
+    if eid == 'project_list.html':
+        data = DBProject.objects.all()
+        print(data)
+        res = {'projects': data}
+    if eid == 'P_apis.html':
+        project_name = DBProject.objects.filter(id=oid)[0].name
+        res = {'project_name': project_name}
 
     return res
 
@@ -104,3 +111,58 @@ def pei(request):
 # 帮助文档
 def api_help(request):
     return render(request, 'welcome.html', {'whichHTML': 'help.html', 'oid': ''})
+
+
+# 项目列表
+def project_list(request):
+    return render(request, 'welcome.html', {'whichHTML': 'project_list.html', 'oid': ''})
+
+
+# 删除项目
+def delete_project(request):
+    id_ = request.GET['id']
+    DBProject.objects.filter(id=id_).delete()
+    return HttpResponse('')
+
+
+# 添加项目
+def add_project(request):
+    project_name = request.GET['project_name']
+    project_remark = request.GET['project_remark']
+    DBProject.objects.create(
+        name=project_name,
+        remark=project_remark,
+        user=request.user.username,
+        other_user=''
+    )
+    return HttpResponse('')
+
+
+# 进入接口库
+def open_apis(request, id):
+    project_id = id
+    return render(
+        request,
+        'welcome.html',
+        {'whichHTML': 'P_apis.html', 'oid': project_id}
+    )
+
+
+# 进入用例设置
+def open_cases(request, id):
+    project_id = id
+    return render(
+        request,
+        'welcome.html',
+        {'whichHTML': 'P_cases.html', 'oid': ''}
+    )
+
+
+# 进入项目设置
+def open_project_set(request, id):
+    project_id = id
+    return render(
+        request,
+        'welcome.html',
+        {'whichHTML': 'P_project_set.html', 'oid': ''}
+    )
