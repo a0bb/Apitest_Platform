@@ -7,3 +7,4 @@ from myapp.models import *
 admin.site.register(DBTucao)
 admin.site.register(DBHomeHref)
 admin.site.register(DBProject)
+admin.site.register(DBApis)

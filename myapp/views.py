@@ -4,7 +4,7 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from myapp.models import DBTucao, DBHomeHref, DBProject
+from myapp.models import DBTucao, DBHomeHref, DBProject, DBApis
 """
 HttpResponse函数是用来返回一个字符串的，后续返回的json格式字符串也是用它;
 HttpResponseRedirect 是用来重定向到其他url上的;
@@ -49,7 +49,8 @@ def child_json(eid, oid=''):
         res = {'projects': data}
     if eid == 'P_apis.html':
         project = DBProject.objects.filter(id=oid)[0]
-        res = {'project': project}
+        apis = DBApis.objects.filter(project_id=oid)
+        res = {'project': project, 'apis': apis}
     if eid == 'P_cases.html':
         project = DBProject.objects.filter(id=oid)[0]
         res = {'project': project}
