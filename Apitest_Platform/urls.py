@@ -37,7 +37,13 @@ urlpatterns = [
     url(r'^add_project/$', add_project),  # 添加项目
     url(r'^apis/(?P<id>.*)/$', open_apis),  # 进入接口库
     url(r'^cases/(?P<id>.*)/$', open_cases),  # 进入用例设置
+
     url(r'^project_set/(?P<id>.*)/$', open_project_set),  # 进入项目设置
     url(r'^save_project_set/(?P<id>.*)/$', save_project_set),  # 保存项目设置
+
+    url(r'^project_api_add/(?P<Pid>.*)/$', project_api_add),  # 新增api
+    url(r'^project_api_del/(?P<id>.*)/$', project_api_del),  # 删除api
+    url(r'^save_bz/$', save_bz),  # 保存备注
+    url(r'^get_bz/$', get_bz),  # 获取备注
 
 ]

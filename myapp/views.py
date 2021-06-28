@@ -185,3 +185,31 @@ def save_project_set(request, id):
 
     return HttpResponse('')
 
+
+# 新增接口
+def project_api_add(request, Pid):
+    project_id = Pid
+    DBApis.objects.create(project_id=project_id)
+    return HttpResponseRedirect(f'/apis/{project_id}/')
+
+
+# 删除接口
+def project_api_del(request, id):
+    project_id = DBApis.objects.get(id=id).project_id
+    DBApis.objects.filter(id=id).delete()
+    return HttpResponseRedirect(f'/apis/{project_id}/')
+
+
+# 保存备注 des
+def save_bz(request):
+    api_id = request.GET['api_id']
+    bz_value = request.GET['bz_value']
+    DBApis.objects.filter(id=api_id).update(des=bz_value)
+    return HttpResponse('')
+
+
+# 获取备注
+def get_bz(request):
+    api_id = request.GET['api_id']
+    bz = DBApis.objects.get(id=api_id).des
+    return HttpResponse(bz)
