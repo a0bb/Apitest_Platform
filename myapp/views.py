@@ -4,6 +4,8 @@ from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+import json
+
 from myapp.models import DBTucao, DBHomeHref, DBProject, DBApis
 """
 HttpResponse函数是用来返回一个字符串的，后续返回的json格式字符串也是用它;
@@ -129,6 +131,7 @@ def project_list(request):
 def delete_project(request):
     id_ = request.GET['id']
     DBProject.objects.filter(id=id_).delete()
+    DBApis.objects.filter(project_id=id_).delete()
     return HttpResponse('')
 
 
@@ -213,3 +216,69 @@ def get_bz(request):
     api_id = request.GET['api_id']
     bz = DBApis.objects.get(id=api_id).des
     return HttpResponse(bz)
+
+
+# 接口保存
+def api_save(request):
+    api_id = request.GET['api_id']
+    api_name = request.GET['api_name']
+    ts_method = request.GET['ts_method']
+    ts_url = request.GET['ts_url']
+    ts_host = request.GET['ts_host']
+    ts_header = request.GET['ts_header']
+    ts_body_method = request.GET['ts_body_method']
+
+    if ts_body_method == '返回体':
+        api = DBApis.objects.get(id=api_id)
+        ts_body_method = api.last_body_method
+        ts_api_body = api.last_api_body
+        if ts_body_method in [None, '']:
+            return HttpResponse('请先选择好请求体编码格式和请求体，再点击Send按钮发送请求！')
+    else:
+        ts_api_body = request.GET['ts_api_body']
+        DBApis.objects.filter(id=api_id).update(
+            last_body_method=ts_body_method, last_api_body=ts_api_body
+        )
+
+    DBApis.objects.filter(id=api_id).update(
+        name=api_name,
+        api_method=ts_method,
+        api_url=ts_url,
+        api_header=ts_header,
+        api_host=ts_host,
+        body_method=ts_body_method,
+        api_body=ts_api_body
+    )
+    return HttpResponse('success')
+
+
+# 获取接口数据
+def get_api_data(request):
+    api_id = request.GET['api_id']
+    api = DBApis.objects.filter(id=api_id).values()[0]
+    return HttpResponse(json.dumps(api), content_type='application/json')
+
+
+# 发送接口数据
+def api_send(request):
+    api_id = request.GET['api_id']
+    api_name = request.GET['api_name']
+    ts_method = request.GET['ts_method']
+    ts_url = request.GET['ts_url']
+    ts_host = request.GET['ts_host']
+    ts_header = request.GET['ts_header']
+    ts_body_method = request.GET['ts_body_method']
+
+    if ts_body_method == '返回体':
+        api = DBApis.objects.get(id=api_id)
+        ts_body_method = api.last_body_method
+        ts_api_body = api.last_api_body
+        if ts_body_method in [None, '']:
+            return HttpResponse('请先选择好请求体编码格式和请求体，再点击Send按钮发送请求！')
+    else:
+        ts_api_body = request.GET['ts_api_body']
+        DBApis.objects.filter(id=api_id).update(
+            last_body_method=ts_body_method, last_api_body=ts_api_body
+        )
+
+    return HttpResponse('{"code": 200}')

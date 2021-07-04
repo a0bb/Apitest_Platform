@@ -46,4 +46,8 @@ urlpatterns = [
     url(r'^save_bz/$', save_bz),  # 保存备注
     url(r'^get_bz/$', get_bz),  # 获取备注
 
+    url(r'^api_save/$', api_save),  # 保存接口
+    url(r'^get_api_data/$', get_api_data),  # 获取接口数据
+    url(r'^api_send/$', api_send),  # 发送接口数据
+
 ]
